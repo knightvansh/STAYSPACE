@@ -1,0 +1,165 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar{
+    height: 4rem;
+}
+.fa-compass{
+  color:red;
+  font-size:2 rem;
+}
+.nav-link{
+   color:black !important;
+}
+.search-box {
+  border-radius: 1.25rem;
+  box-shadow: 0 0 0.1rem 0.1rem lightgray;
+}
+
+  .search-box:hover{
+  border-color: lightgray;
+  box-shadow: 0 0 0.1rem 0.1rem lightgray;
+  }
+  .search-box:focus {
+  border-color: lightgray;
+  box-shadow: 0 0 0.1rem 0.1rem lightgray;
+  background-color: initial;
+}
+.search-box::placeholder {
+  font-size: small;
+  color: gray;
+}
+.search-btn {
+  border: 1px solid lightgray;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  color: white;
+  background-color: #ff385c;
+  padding: 0.5rem 0.75rem;
+}
+.search-btn:focus, .fa-magnifying-glass:focus {
+  color: #ff385c;
+  background-color: white;
+}
+
+
+/* footer */
+
+.foot-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #ebebeb;
+  height: auto;
+  text-align: center;
+  padding: 1rem 0 1.5rem;
+}
+.f-info-links a{
+  text-decoration: none;
+  color: black;
+}
+.f-info-links a:hover{
+ text-decoration: underline;
+}
+.f-info{
+   height: 8 rem;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   align-items: space-evenly;
+}
+
+
+.f-info-socials {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+
+
+/* Cards */
+.listing-link {
+  text-decoration: none;
+}
+
+.listing-card{
+    border: none !important;
+    margin-bottom:2rem !important ;
+    padding: 0;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding: 0 !important;
+}
+
+.card-text{
+    font-weight: 600 !important;
+}
+.card-text span {
+  font-weight: normal !important;
+}
+/* Card Overlay Effect on Card */
+.card-img-overlay {
+  opacity: 0;
+}
+
+.card-img-overlay:hover {
+  opacity: 0.25;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+/* NEW PAGE */
+ .btn{
+  background-color: #fe424d ! important;
+  border:none! important;
+ }
+ /* EDIT PAGE */
+ .edit-brn{
+   background-color: #fe424d ! important;
+  border:none! important;
+ }
+ /* Show Listing Page */
+.show-img {
+  height: 30dvh;
+}
+
+
+
+  /* display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.listing-card img {
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.listing-card {
+  border: none;
+  transition: transform 0.15s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-3px);
+}
+
+footer {
+  margin-top: auto;
+} */
