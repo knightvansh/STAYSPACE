@@ -28,8 +28,28 @@
 <br>
   <div class="col1">
 <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
- <button type="submit" " class="btn btn-dark">Delete Listing</button>
+ <button type="submit" " class="btn btn-dark">Delete </button>
 </form>
   </div>
+
+
+  <!-- review -->
+   <hr />
+     <h4 class="fs-4"><b>Rating and reviews</b></h4>
+  <form action="">
+  <div class="mb-3 mt-3" >
+    <div>
+   <label  class="form-label fw-bold" for="rating">RATING</label>
+   <input type="range" min="1" max="5" id="rating" name="review[rating]">
+   </div>
+
+  <div>
+   <label for="Comments" class="form-label fw-bold">Comments</label>
+   <textarea name="review[comment]" id="cmment" cols="30" rows="5" class="form-control"></textarea>
+ </div>
+
+  <button class="btn btn-outline- btn-dark">Submit</button>
+  </form>
+
 
 </body>
