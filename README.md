@@ -1,6 +1,6 @@
 # STAYSPACE — Rental Listing Platform
 
-A full-stack rental listing web application inspired by Airbnb, built to practice CRUD operations, authentication, and MVC architecture.
+Built a full-stack accommodation platform using Node.js, Express.js, MongoDB, EJS and Bootstrap with CRUD operations, user authentication, session management, reviews and ratings. Deployed the application using cloud hosting and migrated the database to MongoDB Atlas with environment-based configuration.
 
 ## Features
 - User authentication (signup/login/logout)
