@@ -7,11 +7,11 @@
     </div>
 
  <!-- Listing Card -->
-    <div class="col-10 offset-1 my-2 mb-4">
-            <img
-             src="<%= listing.image && listing.image.url ? listing.image.url : 'https://via.placeholder.com/800x400?text=No+Image '%>"
-             class="card-img-top object-fit-cover show-img"
-             alt="Listing Image" />
+<div class="col-10 offset-1 my-2 mb-4">
+    <img
+      src="<%= listing.image && listing.image.url ? listing.image.url : 'https://via.placeholder.com/800x400?text=No+Image '%>"
+     class="card-img-top object-fit-cover show-img"
+     alt="Listing Image" />
                 <!-- Listing Card Body  -->
             <div class="card-body mx-2">
                 <p class="card-text"><b><h3><%=listing.title %></h3></b></p>
@@ -26,7 +26,8 @@
 <a href="/listings/<%=listing._id %>/edit" class="btn btn-dark"> Edit </a>
 </div>
 <br>
-  <div class="col1">
+
+ <div class="col1">
 <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
  <button type="submit" " class="btn btn-dark">Delete </button>
 </form>
@@ -35,9 +36,10 @@
 
   <!-- review -->
    <hr />
-     <h4 class="fs-4"><b>Rating and reviews</b></h4>
-  <form action="">
+  <h4 class="fs-4"><b>Rating and reviews</b></h4>
+  <form action="/listings/<%= listing._id %>/reviews"  method="POST" novalidate class="needs-validation">
   <div class="mb-3 mt-3" >
+
     <div>
    <label  class="form-label fw-bold" for="rating">RATING</label>
    <input type="range" min="1" max="5" id="rating" name="review[rating]">
@@ -45,11 +47,27 @@
 
   <div>
    <label for="Comments" class="form-label fw-bold">Comments</label>
-   <textarea name="review[comment]" id="cmment" cols="30" rows="5" class="form-control"></textarea>
+   <textarea name="review[comment]" id="cmment" cols="30" rows="5"
+    class="form-control" required >
+   </textarea>
  </div>
 
+ <div class="invalid-feedback">  please Submit some comment for review</div>
+
   <button class="btn btn-outline- btn-dark">Submit</button>
-  </form>
+</div>
+ </form>
 
 
+ <!-- //Use for showing the review which is added through the form button.  -->
+<hr />
+<h4>All Reviews</h4>
+<% for (let review of listing.reviews) { %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <p class="card-text">Rating: <%= review.rating %> / 5</p>
+      <p class="card-text"><%= review.comment %></p>
+    </div>
+  </div>
+<% } %>
 </body>

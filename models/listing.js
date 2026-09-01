@@ -16,17 +16,18 @@ price: Number,
 location:String,
 country:String,
 reviews: [
-    { type: Schema.Types.ObjectId, ref: "Review" }],
+    { type: Schema.Types.ObjectId, ref: "Review" }
+],
 owner: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
 
 // Post Mongoose Middleware
-listingSchema.post("findOneAndDelete", async (listing) => {
-    if (listing) {
-        await Review.deleteMany({ _id: { $in: listing.reviews } });
-    }
-});
+// listingSchema.post("findOneAndDelete", async (listing) => {
+//     if (listing) {
+//         await Review.deleteMany({ _id: { $in: listing.reviews } });
+//     }
+// });
 
 
 /* Model creating and exporting */
