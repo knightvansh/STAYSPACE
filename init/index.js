@@ -19,6 +19,10 @@ main()
 
 const initDB = async () => {
   await Listing.deleteMany({});
+  initData.data = initData.data.map((obj) => ({
+    ...obj,
+    owner: "6a9be30625cdce81d7788e53"
+}));
   await Listing.insertMany(initData.data);
   console.log("data was initialized");
   
@@ -26,4 +30,4 @@ const initDB = async () => {
 
 initDB();
 // Once the data is inserted, it stays in MongoDB.
-// Your normal app.js doesn't need to import data.js to retrieve those listings.
+// Your normal app.js doesn't need to import data.js to retrieve those listings.~

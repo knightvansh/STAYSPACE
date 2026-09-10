@@ -9,6 +9,7 @@ const ExpressError=require("../utils/ExpressError.js");
 // Multer storage config — keeps the file extension, unlike the old dest-only setup
 const multer = require("multer");
 const path = require("path");
+const { isLoggedIn } = require("../utils/middleware.js");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -32,68 +33,48 @@ const validateListing=(req, res, next)=>{
   next();
 
 };
+const ListingController=require("../controllers/listing.js")
 
-  
-//Index Route -Show all listings/Just displays data
- router.get("/",  wrapAsync(async(req, res) => {
-  const allListings = await Listing.find({});
-   res.render("listings/index.ejs", { allListings });
- })
- );
 
- //new route-Displays an HTML form, nothing saved yet
- router.get("/new",  wrapAsync(async(req, res) => {
-   res.render("listings/new.ejs");
- })
- );
+//Index Route -Show all listings-Just displays data
+ router.get("/",  wrapAsync(ListingController.index) );
 
-// //show routes-Show one listing/just display data
-router.get("/:id",  wrapAsync(async(req, res) =>{
-         let { id } = req.params;
-     const listing = await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs",{listing});
- })
- );
+ //new route-Displays an HTML form -nothing saved yet
+ router.get("/new",isLoggedIn,ListingController.renderNewForm  );
+
+ //show routes-Show one listing-just display data
+router.get("/:id",  wrapAsync(ListingController.ShowListing));
    
-////Create route-Process that form's submission/Takes what the user typed, saves a new document to MongoDB
-  router.post("/", upload.single("listing[image]"), wrapAsync(async (req, res) => {
-  console.log(req.body);   // add this temporarily to see it work
-  console.log(req.file);   // this will show your uploaded file's info
-  const newListing = new Listing(req.body.listing);
-   newListing.image = {
-     url: "/uploads/" + req.file.filename,
-  filename: req.file.filename,
-  };
-  await newListing.save();
-  console.log(newListing);
-  res.redirect("/listings");
-}));
+//Create route-Process that form's submission/Takes what the user typed, saves a new document to MongoDB
+   router.post(
+    "/",
+    isLoggedIn,
+    upload.single("listing[image]"),
+    validateListing,
+      wrapAsync(ListingController.CreateNewForm)
+  );
 
 
 // //Edit Route-Show a pre-filled form/Displays a form with the existing listing's data already in the fields
- router.get("/:id/edit",  wrapAsync(async(req, res) => {
-  let { id } = req.params;
-   const listing = await Listing.findById(id);
-  res.render("listings/edit.ejs", { listing });
-})
+ router.get(
+  "/:id/edit",
+  isLoggedIn,
+   wrapAsync(ListingController.EditNewForm)
 );
 
 // //Update Route-Process that edit form's submission/Takes the edited data, saves changes to the existing document
-  router.put("/:id",upload.single("listing[image]"), 
-   wrapAsync(async(req, res) => {
-  let { id } = req.params;
-   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-   res.redirect(`/listings/${id}`);
- })
+  router.put(
+    "/:id",
+    isLoggedIn,
+    upload.single("listing[image]"), 
+   wrapAsync(ListingController.UpdateNewForm )
  );
 
 // //Delete Route-Remove a listing/Deletes the document
- router.delete("/:id",  wrapAsync(async (req, res) => {
-   let { id } = req.params;
-   let deletedListing = await Listing.findByIdAndDelete(id);
-   console.log(deletedListing);
-   res.redirect("/listings");
- })
+ router.delete(
+  "/:id", 
+  isLoggedIn, 
+  wrapAsync(ListingController.DestroyListing)
  );
 
  module.exports = router;

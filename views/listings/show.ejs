@@ -15,6 +15,7 @@
                 <!-- Listing Card Body  -->
             <div class="card-body mx-2">
                 <p class="card-text"><b><h3><%=listing.title %></h3></b></p>
+                 <p class="card-text"><b><h3><%=listing.owner.username %></h3></b></p>
                 <p class="card-text text-light-emphasis mt-2"><%= listing.description %></p>
                 <p class="card-text">&#8377; <%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
                 <p class="card-text"><%=listing.location%>, <%=listing.country%>.</p>
@@ -22,6 +23,9 @@
          </div>
 
   </div>
+
+<% if( currUser && currUser._id.equals(listing.owner))
+{%>
 <div class="col-1">
 <a href="/listings/<%=listing._id %>/edit" class="btn btn-dark"> Edit </a>
 </div>
@@ -32,8 +36,7 @@
  <button type="submit" " class="btn btn-dark">Delete </button>
 </form>
   </div>
-
-
+<%}%>
   <!-- review -->
    <hr />
   <h4 class="fs-4"><b>Rating and reviews</b></h4>
