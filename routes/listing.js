@@ -1,4 +1,4 @@
-
+ const cloudinary = require("../utils/cloudinary.js");
  const express=require("express");
  const router = express.Router();
  exports.router = router;
@@ -8,20 +8,11 @@ const Listing=require("../models/listing.js");
 const ExpressError=require("../utils/ExpressError.js");
 // Multer storage config — keeps the file extension, unlike the old dest-only setup
 const multer = require("multer");
-const path = require("path");
+// const path = require("path");
 const { isLoggedIn } = require("../utils/middleware.js");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Not wired into any route yet — fix signature if/when you use it as middleware
 const validateListing=(req, res, next)=>{

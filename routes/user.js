@@ -34,7 +34,9 @@ router.post
           failureFlash: true 
         }),
           (req, res) => {
-             const redirectUrl = res.locals.redirectUrl || "/listings";
+            console.log("LOGIN USER:", req.user);
+
+             const redirectUrl =  "/listings";
 
             req.flash("success", "Welcome back to STAYSPACE!");
              res.redirect(redirectUrl);

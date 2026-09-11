@@ -1,4 +1,4 @@
-// require("dotenv").config();
+require("dotenv").config();
 const express=require("express");
 const cors = require("cors");
 const app = express();
@@ -12,8 +12,11 @@ const ejsMate=require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 const {listingSchema,reviewSchema}=require("./schema.js");
+
 //require express session//
 const session=require("express-session");
+const { MongoStore } = require("connect-mongo");
+
 const flash = require('connect-flash');
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
@@ -27,13 +30,14 @@ const Review = require("./models/review.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const  userRouter = require("./routes/user.js");
-// const dbUrl=process.env.ATLASDB_URL;
+ const dbUrl=process.env.ATLASDB_URL;
+
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 async function main(){
-   await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+   await mongoose.connect(dbUrl);
 }
 main()
   . then(()=>{
@@ -54,8 +58,23 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
 //express -session Initialization and using 
+
+const store=MongoStore.create({
+  mongoUrl:dbUrl,
+  crypto:{
+      secret:"process.env.SECRET",
+  },
+ touchAfter:24*3600,
+})
+
+store.on("error",()=>{
+   console.log("ERROR IN MONGO SESSION STORE",err);
+})
+
+
 const  sessionOptions={
-  secret:"mysupersecretcode",
+  store,
+  secret:"process.env.SECRET",
   resave:false, 
   saveUninitialized: true,
   cookie:{
@@ -65,6 +84,7 @@ const  sessionOptions={
         httpOnly:true,
   },
 };
+
 
 
 app.use(session(sessionOptions));
@@ -86,20 +106,10 @@ app.use((req,res,next)=>{
   next();
 });
 
-// app.get("/demouser",async(req,res)=>{
-//   let fakeUser=new User({
-//    email:"agarwalvansh528@gmail.com",
-//    username:"delta",
-//   });
-//    let registeredUser= await User.register(fakeUser,"helloworld");
-//   res.send(registeredUser);
-// });
-
 // Express  Router 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
-
 
 // Catch-all for undefined routes
 app.all("*splat", (req, res, next) => {
@@ -113,6 +123,7 @@ app.use((err, req, res, next) => {
 });
 
 /* Server setup */
-app.listen(8080,()=>{
-console.log("Server is listening to the port 8080")
-})
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});

@@ -1,4 +1,7 @@
 const Listing=require("../models/listing");
+const cloudinary = require("../utils/cloudinary.js");
+const streamifier = require("streamifier");
+
 
 module.exports.index=async(req, res) => {
   const allListings = await Listing.find({});
@@ -18,11 +21,26 @@ module.exports.index=async(req, res) => {
     };
 
  module.exports .CreateNewForm=async (req, res) => {
-          const newListing = new Listing(req.body.listing);
-           newListing.image = {
-          url: "/uploads/" + req.file.filename,
-          filename: req.file.filename,
-      };
+     const newListing = new Listing(req.body.listing);
+     const result = await new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "STAYSPACE" },
+        (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        }
+    );
+
+    streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+});
+
+newListing.image = {
+    url: result.secure_url,
+    filename: result.public_id,
+};
       newListing.owner = req.user._id;
       await newListing.save();
       req.flash("success","new listing added!");
@@ -44,9 +62,45 @@ module.exports.index=async(req, res) => {
 
 module.exports .UpdateNewForm   =async(req, res) => {
   let { id } = req.params;
-   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+  let listing = await Listing.findById(id);
+
+  // Update normal fields
+    listing.title = req.body.listing.title;
+    listing.description = req.body.listing.description;
+    listing.price = req.body.listing.price;
+    listing.location = req.body.listing.location;
+    listing.country = req.body.listing.country;
+
+    // Update image only when a new image is selected
+    if (req.file) {
+
+        const result = await new Promise((resolve, reject) => {
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                { folder: "STAYSPACE" },
+                (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result);
+                    }
+                }
+            );
+
+            streamifier
+                .createReadStream(req.file.buffer)
+                .pipe(uploadStream);
+        });
+
+        listing.image = {
+            url: result.secure_url,
+            filename: result.public_id
+        };
+    }
+   await listing.save();
    res.redirect(`/listings/${id}`);
 };
+
 
 
 module.exports .DestroyListing=  async (req, res) => {
