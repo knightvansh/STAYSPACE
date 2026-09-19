@@ -30,7 +30,7 @@ const Review = require("./models/review.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const  userRouter = require("./routes/user.js");
- const dbUrl=process.env.ATLASDB_URL;
+const dbUrl=process.env.ATLASDB_URL;
 
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
