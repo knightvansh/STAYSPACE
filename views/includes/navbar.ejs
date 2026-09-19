@@ -3,11 +3,18 @@
   <a class="navbar-brand mx-4" href="/listings">
     <i class="fa-solid fa-diamond-turn-right"></i>
     STAYSPACE</a>
+
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+  <!--  Dark mode button -->
+<button id="theme-toggle" class="btn btn-outline-secondary rounded-circle border-0">
+  <i id="theme-icon" class="fa-solid fa-moon"></i>
+</button>
+
+   <!-- Search and explore button  -->
+<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav fw-bold">
             <a class="nav-link" href="/listings">Explore</a>
         </div>
@@ -17,24 +24,28 @@
                 <button class="search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;<strong>Search</strong></button>
             </form>
         </div>
-    </div>
+  </div>
 
+ 
+  <!-- Home listing and Add New Listing button  -->
     <div class="navbar-nav ">
-      <a class="nav-item nav-link " href="/">Home <span class="sr-only"></span></a>
+      <a class="nav-item nav-link " href="/listings">Home <span class="sr-only"></span></a>
       <a class="nav-item nav-link" href="/listings">All Listings</a>
       <a class="nav-item nav-link" href="listings/new"> Add new listing</a>
   </div>
 
+    <!-- login, logout, and signup button  -->
   <div class="navbar-nav fw-bold ms-auto">
-     <% if(!currUser) { %>
+     <% if(!currUser)
+      { %>
       <a class="nav-item nav-link " href="/signup">Sign up <span class="sr-only"></span></a>
       <a class="nav-item nav-link" href="/login">Login</a>
       <%} %>
   </div>
   </div>
-    <% if(currUser) { %>
+  <% if(currUser) { %>
   <form action="/logout" method="POST">
-    <button type="submit">Log out</button>
+   <button type="submit">Log out</button>
 </form>
    <%} %>
 </nav> 

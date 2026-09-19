@@ -122,6 +122,11 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { message });
 });
 
+
+ app.get("/",(req,res)=>{
+      console.log("vansh");
+ });
+// 
 /* Server setup */
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

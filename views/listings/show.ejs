@@ -8,6 +8,11 @@
 
  <!-- Listing Card -->
 <div class="col-10 offset-1 my-2 mb-4">
+  <div id="map" style="height: 400px; width: 100%; border-radius: 10px;">
+    <script>
+  // The server replaces these EJS tags with actual data BEFORE sending it to the browser
+  const listing = <%- JSON.stringify(listing) %>;
+</script>
     <img
       src="<%= listing.image && listing.image.url ? listing.image.url : 'https://via.placeholder.com/800x400?text=No+Image '%>"
      class="card-img-top object-fit-cover show-img"
@@ -19,10 +24,11 @@
                 <p class="card-text text-light-emphasis mt-2"><%= listing.description %></p>
                 <p class="card-text">&#8377; <%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
                 <p class="card-text"><%=listing.location%>, <%=listing.country%>.</p>
-             </div>
+          <!-- Load your map logic AFTER defining the data -->
+<script src="/js/map.js"></script>   
          </div>
-
   </div>
+</div>
 
 <% if( currUser && currUser._id.equals(listing.owner))
 {%>

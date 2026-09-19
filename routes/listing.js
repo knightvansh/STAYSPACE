@@ -27,45 +27,40 @@ const validateListing=(req, res, next)=>{
 const ListingController=require("../controllers/listing.js")
 
 
-//Index Route -Show all listings-Just displays data
- router.get("/",  wrapAsync(ListingController.index) );
 
- //new route-Displays an HTML form -nothing saved yet
- router.get("/new",isLoggedIn,ListingController.renderNewForm  );
-
- //show routes-Show one listing-just display data
-router.get("/:id",  wrapAsync(ListingController.ShowListing));
-   
-//Create route-Process that form's submission/Takes what the user typed, saves a new document to MongoDB
-   router.post(
-    "/",
+// 2. Root Routes (Index & Create)
+router
+.route("/")
+ .get( wrapAsync(ListingController.index))
+ .post(
     isLoggedIn,
     upload.single("listing[image]"),
     validateListing,
-      wrapAsync(ListingController.CreateNewForm)
+    wrapAsync(ListingController.CreateNewForm)
   );
 
+  router.get("/new",isLoggedIn,ListingController.renderNewForm  );
 
-// //Edit Route-Show a pre-filled form/Displays a form with the existing listing's data already in the fields
- router.get(
+// 3. Edit Form Route
+router.get(
   "/:id/edit",
   isLoggedIn,
-   wrapAsync(ListingController.EditNewForm)
+  wrapAsync(ListingController.EditNewForm)
 );
 
-// //Update Route-Process that edit form's submission/Takes the edited data, saves changes to the existing document
-  router.put(
-    "/:id",
+// 4. Parameterized ID Routes (Show, Update, Delete)
+router
+.route("/:id")
+ .get (wrapAsync(ListingController.ShowListing))
+ .put(
     isLoggedIn,
     upload.single("listing[image]"), 
    wrapAsync(ListingController.UpdateNewForm )
- );
-
-// //Delete Route-Remove a listing/Deletes the document
- router.delete(
-  "/:id", 
+ )
+ .delete(
   isLoggedIn, 
   wrapAsync(ListingController.DestroyListing)
  );
+ 
 
  module.exports = router;

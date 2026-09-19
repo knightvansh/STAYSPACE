@@ -19,6 +19,44 @@
   })
 })();
 
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const htmlElement = document.documentElement; // Targets the <html> tag
+
+// 1. Check if the user previously chose a theme (stored in the browser)
+const currentTheme = localStorage.getItem('theme') || 'light';
+htmlElement.setAttribute('data-bs-theme', currentTheme);
+updateIcon(currentTheme);
+
+// 2. Listen for clicks on the toggle button
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        // Check current theme and swap it
+        const currentAttr = htmlElement.getAttribute('data-bs-theme');
+        const newTheme = currentAttr === 'light' ? 'dark' : 'light';
+        
+        // Apply the new theme to the HTML tag
+        htmlElement.setAttribute('data-bs-theme', newTheme);
+        
+        // Save the choice so it doesn't reset when they change pages
+        localStorage.setItem('theme', newTheme);
+        
+        // Update the sun/moon icon
+        updateIcon(newTheme);
+    });
+}
+
+// Helper function to swap the FontAwesome icon
+function updateIcon(theme) {
+    if (theme === 'dark') {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun', 'text-warning'); // Sun icon with yellow color
+    } else {
+        themeIcon.classList.remove('fa-sun', 'text-warning');
+        themeIcon.classList.add('fa-moon'); // Moon icon
+    }
+}
+
 
 
 // JavaScript for Tax Switch Toggle.
@@ -30,3 +68,4 @@ let texSwitchToggle = () => {
         else info.style.display = "none";
     }
 };
+
