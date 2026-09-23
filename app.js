@@ -2,8 +2,8 @@ require("dotenv").config();
 const express=require("express");
 const cors = require("cors");
 const app = express();
-app.use(cors());
-app.use(express.json());
+// app.use(cors());
+// app.use(express.json());
 const mongoose=require("mongoose");
 const Listing=require("./models/listing.js");
 const path = require("path");
@@ -55,14 +55,16 @@ main()
 //Use EJS for rendering pages and look for those pages inside views.
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
+app.engine("ejs", ejsMate);
+
+app.use(cors());
+ app.use(express.json());
 // middleware allows Express to understand data submitted from new.ejs.
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
 //express -session Initialization and using 
-
 const store=MongoStore.create({
   mongoUrl:dbUrl,
   crypto:{
@@ -116,7 +118,7 @@ app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
 // Catch-all for undefined routes
-app.all("*splat", (req, res, next) => {
+app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 
@@ -127,9 +129,6 @@ app.use((err, req, res, next) => {
 });
 
 
- app.get("/",(req,res)=>{
-      console.log("vansh");
- });
 // 
 /* Server setup */
 const PORT = process.env.PORT || 8080;

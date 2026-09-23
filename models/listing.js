@@ -35,5 +35,3 @@ owner: { type: Schema.Types.ObjectId,
 /* Model creating and exporting */
 const Listing=mongoose.model("Listing",listingSchema);
 module.exports=Listing;
-// This gives you the Listing /.zxx.
-// You import it into app.js:

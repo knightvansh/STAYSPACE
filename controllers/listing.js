@@ -4,7 +4,7 @@ const streamifier = require("streamifier");
 
 
 module.exports.index=async(req, res) => {
-  const allListings = await Listing.find({});
+  const allListings = await Listing.find({}).sort({ _id: -1 });
    console.log("TOTAL LISTINGS:", allListings.length);
    res.render("listings/index.ejs", { allListings });
  }
@@ -16,7 +16,8 @@ module.exports.index=async(req, res) => {
 
  module.exports.ShowListing=async(req, res) =>{
             let { id } = req.params;
-        const listing = await Listing.findById(id).populate("reviews");
+        const listing = await Listing.findById(id)
+        .populate("reviews");
        res.render("listings/show.ejs",{listing});
     };
 
@@ -73,9 +74,7 @@ module.exports .UpdateNewForm   =async(req, res) => {
 
     // Update image only when a new image is selected
     if (req.file) {
-
         const result = await new Promise((resolve, reject) => {
-
             const uploadStream = cloudinary.uploader.upload_stream(
                 { folder: "STAYSPACE" },
                 (error, result) => {
@@ -86,7 +85,6 @@ module.exports .UpdateNewForm   =async(req, res) => {
                     }
                 }
             );
-
             streamifier
                 .createReadStream(req.file.buffer)
                 .pipe(uploadStream);
@@ -99,7 +97,7 @@ module.exports .UpdateNewForm   =async(req, res) => {
     }
    await listing.save();
    res.redirect(`/listings/${id}`);
-};
+}; 
 
 
 

@@ -50,7 +50,7 @@ router.get(
 
 // 4. Parameterized ID Routes (Show, Update, Delete)
 router
-.route("/: ")
+.route("/:id")
  .get (wrapAsync(ListingController.ShowListing))
  .put(
     isLoggedIn,

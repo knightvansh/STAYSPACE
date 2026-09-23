@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 const mongoose=require("mongoose");
 const initData=require("./data.js")
 const Listing = require("../models/listing.js");
@@ -19,10 +19,13 @@ main()
 
 
 const initDB = async () => {
+// If your database ever gets cluttered with spam from people testing your website, all you have to do is open your terminal and run node init/index.js.
+// wipes out all the junk listings and restores your database to the beautiful, pristine state with your original 30 propertie
+
   await Listing.deleteMany({});
   initData.data = initData.data.map((obj) => ({
     ...obj,
-    owner: "6aa460e828e4a11946e5bcf9"
+    owner: "6ab2a2642fc0ebca51fcc878"
 }));
   await Listing.insertMany(initData.data);
   console.log("data was initialized");
