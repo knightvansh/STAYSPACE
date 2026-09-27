@@ -124,22 +124,27 @@ body {
 
 
 /* NEW PAGE */
- .btn{
+ /* .btn{
   background-color: #fe424d ! important;
   border:none! important;
- }
- /* EDIT PAGE */
- .edit-brn{
-   background-color: #fe424d ! important;
+ } */
+ /* EDIT PAGE
+ .edit-btn{
+   background-color:;
   border:none! important;
- }
+ } */
  /* Show Listing Page */
 .show-img {
   height: 30dvh;
 }
 
+/* body.dark-mode .navbar-brand img {
+    filter: invert(1);
+} */
 
-
+/* body.dark-mode .navbar-brand {
+    color: white !important;
+} */
   /* display: flex;
   flex-direction: column;
   min-height: 100vh;

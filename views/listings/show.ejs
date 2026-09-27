@@ -8,41 +8,47 @@
 
  <!-- Listing Card -->
 <div class="col-10 offset-1 my-2 mb-4">
-  <div id="map" style="height: 400px; width: 100%; border-radius: 10px;">
-    <script>
-  // The server replaces these EJS tags with actual data BEFORE sending it to the browser
+  <div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+     <script>
   const listing = <%- JSON.stringify(listing) %>;
-</script>
+     </script>
+  <div class="card">
     <img
       src="<%= listing.image && listing.image.url ? listing.image.url : 'https://via.placeholder.com/800x400?text=No+Image '%>"
      class="card-img-top object-fit-cover show-img"
      alt="Listing Image" />
-                <!-- Listing Card Body  -->
-            <div class="card-body mx-2">
-                <p class="card-text"><b><h3><%=listing.title %></h3></b></p>
-                 <p class="card-text"><b><h3><%=listing.owner.username %></h3></b></p>
-                <p class="card-text text-light-emphasis mt-2"><%= listing.description %></p>
-                <p class="card-text">&#8377; <%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
-                <p class="card-text"><%=listing.location%>, <%=listing.country%>.</p>
+          <!-- Listing Card Body  -->
+    <div class="card-body mx-2 ">
+       <h3 class="card-title" style="word-break: break-all; text-align: justify; overflow-wrap: break-word; white-space: normal;">
+                        <b><%= listing.title %></b>
+        </h3> 
+      
+       <p class="card-text  text-break  ">
+            <b>Owned by:<%=listing.owner.username %></b>
+       </p>
+
+       <p class="card-text text-light-emphasis mt-2" style="word-break: break-all; text-align: justify; overflow-wrap: break-word; white-space: normal;">
+                        <%= listing.description %>
+        </p>        
+       <p class="card-text">&#8377; <%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
+       <p class="card-text"><%=listing.location%>, <%=listing.country%>.</p>
+
           <!-- Load your map logic AFTER defining the data -->
 <script src="/js/map.js"></script>   
-         </div>
-  </div>
+   </div>
+ </div>
 </div>
 
-<% if( currUser && currUser._id.equals(listing.owner))
-{%>
-<div class="col-1">
-<a href="/listings/<%=listing._id %>/edit" class="btn btn-dark"> Edit </a>
-</div>
+<% if( currUser && currUser._id.equals(listing.owner._id ||listing.owner))
+  {%>
+<div class="d-flex align-items-center gap-3">
+<a href="/listings/<%=listing._id %>/edit" class="btn btn-dark w-auto "> Edit </a>
 <br>
-
- <div class="col1">
-<form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
- <button type="submit" " class="btn btn-dark">Delete </button>
-</form>
-  </div>
-<%}%>
+ <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE"class="m-0">
+ <button type="submit" " class="btn btn-dark w-auto ">Delete </button>
+  </form>
+</div>
+  <%}%>
   <!-- review -->
    <hr />
   <h4 class="fs-4"><b>Rating and reviews</b></h4>
@@ -69,7 +75,7 @@
 
 
  <!-- //Use for showing the review which is added through the form button.  -->
-<hr />
+
 <h4>All Reviews</h4>
 <% for (let review of listing.reviews) { %>
   <div class="card mb-3">
