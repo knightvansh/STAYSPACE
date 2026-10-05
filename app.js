@@ -28,18 +28,17 @@ app.get("/", (req, res) => {
     res.redirect("/listings");
 });
 
+ app.use(express.json());
 //review import
 const Review = require("./models/review.js");
 //routes
 const listingRouter=require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const  userRouter = require("./routes/user.js");
+const paymentRoutes = require('./routes/payment');
 const dbUrl=process.env.ATLASDB_URL;
 
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-
 async function main(){
    await mongoose.connect(dbUrl);
 }
@@ -50,15 +49,13 @@ main()
   .catch((err)=>{
      console.log(err);
   })
-
-
 //Use EJS for rendering pages and look for those pages inside views.
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.engine("ejs", ejsMate);
 
 app.use(cors());
- app.use(express.json());
+
 // middleware allows Express to understand data submitted from new.ejs.
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
@@ -77,7 +74,6 @@ store.on("error",()=>{
    console.log("ERROR IN MONGO SESSION STORE",err);
 })
 
-
 const  sessionOptions={
   store,
   secret:"process.env.SECRET",
@@ -86,16 +82,12 @@ const  sessionOptions={
   cookie:{
         expire:Date.now()+7*24*60*60*10000,
         maxAge:7*24*60*60*10000,
-        // if both expires and maxAge are set in the options, then the maxage defined in the object is what is used.
         httpOnly:true,
   },
 };
 
-
-
 app.use(session(sessionOptions));
 app.use(flash());
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -108,28 +100,22 @@ app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error = req.flash("error");
    res.locals.currUser = req.user;
-   res.locals.error = req.flash("error");
   next();
 });
-
 // Express  Router 
 app.use("/listings", listingRouter);
+app.use('/api/payment', paymentRoutes);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
-
 // Catch-all for undefined routes
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
-
 // Main error handler
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message });
 });
-
-
-// 
 /* Server setup */
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

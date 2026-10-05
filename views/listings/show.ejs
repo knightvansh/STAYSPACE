@@ -33,11 +33,22 @@
        <p class="card-text">&#8377; <%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
        <p class="card-text"><%=listing.location%>, <%=listing.country%>.</p>
 
-          <!-- Load your map logic AFTER defining the data -->
+   <!-- Load your map logic AFTER defining the data -->
 <script src="/js/map.js"></script>   
    </div>
  </div>
 </div>
+
+<% if (currUser) { %>
+    <!-- If user is logged in, show the actual payment button -->
+    <button id="pay-btn" data-listing-id="<%= listing._id %>" class="btn btn-danger"> Book Now </button>
+    <% } 
+    else { %>
+    <!-- If user is NOT logged in, redirect them to the login page -->
+    <a href="/login" class="btn btn-danger">Login to Book </a>   
+    <% } %>
+
+<br><br>
 
 <% if( currUser && currUser._id.equals(listing.owner._id ||listing.owner))
   {%>
@@ -85,4 +96,8 @@
     </div>
   </div>
 <% } %>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/js/payment.js"></script>
+</script>
 </body>

@@ -2,10 +2,8 @@
 // Function for form validation.
 (() => {
   'use strict'
-
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   const forms = document.querySelectorAll('.needs-validation')
-
   // Loop over them and prevent submission
   Array.from(forms).forEach(form => {
     form.addEventListener('submit', event => {
@@ -27,14 +25,12 @@ const htmlElement = document.documentElement; // Targets the <html> tag
 const currentTheme = localStorage.getItem('theme') || 'light';
 htmlElement.setAttribute('data-bs-theme', currentTheme);
 updateIcon(currentTheme);
-
 // 2. Listen for clicks on the toggle button
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
         // Check current theme and swap it
         const currentAttr = htmlElement.getAttribute('data-bs-theme');
         const newTheme = currentAttr === 'light' ? 'dark' : 'light';
-        
         // Apply the new theme to the HTML tag
         htmlElement.setAttribute('data-bs-theme', newTheme);
         
