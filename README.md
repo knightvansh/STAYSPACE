@@ -17,7 +17,7 @@ Login with:
 *(Note: Visitors using this account can create and manage their own test listings, while protected authorization rules safeguard showcase data).*
 
 ## ✨ Key Features
-
+* **Secure Payment Integration:** End-to-end Razorpay payment flow with SHA-256 HMAC signature verification on the Node.js backend to prevent fraud.
 * **🔐 Secure Authentication:** Powered by **Passport.js** and `passport-local-mongoose` with salted password hashing and session management.
 * **🛡️ Strict Authorization:** Custom middleware ensures that only verified property owners can edit or delete listings.
 * **📂 Full CRUD Operations:** Users can create, view, update, and delete property listings and reviews seamlessly.
@@ -49,9 +49,11 @@ Backend: Node.js, Express.js
 
 Database: MongoDB Atlas, Mongoose ODM
 
-Authentication: Passport.js, Express-Session, Connect-Flash
+Authentication: Passport.js, Express-Session, Connect-Flash,Crypto
 
 File Storage: Cloudinary, Multer, Streamifier
+
+**Third-Party APIs:** Razorpay API (Payments), Cloudinary API (Media)
 
 Deployment: Render
 
@@ -76,6 +78,8 @@ SECRET=your_express_session_secret
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_KEY=your_cloudinary_api_key
 CLOUDINARY_SECRET=your_cloudinary_api_secret
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 
 4. Seed the Database
 To populate the database with initial sample listings:
