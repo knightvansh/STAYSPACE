@@ -1,8 +1,9 @@
-// console.log("My Key ID is:", process.env.RAZORPAY_KEY_ID); // <-- ये लाइन डाल
-const Razorpay = require('razorpay');
+
+
 const crypto = require('crypto');
 const Booking = require('../models/booking');
 const Listing = require('../models/listing'); 
+const Razorpay = require('razorpay');
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -50,7 +51,7 @@ module.exports.createOrder = async (req, res) => {
             await newBooking.save(); // Save to MongoDB!
             console.log("Booking saved to Database!");
             // console.log("Payment successfully verified by backend!");
-            // (In Sprint 4, we will save this to MongoDB here)
+            // (In, we will save this to MongoDB here
             return res.status(200).json({ success: true, message: "Payment verified successfully" });
         } else {
             console.log("Fake Payment Detected!");
