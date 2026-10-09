@@ -24,25 +24,24 @@ module.exports.index=async(req, res) => {
  module.exports .CreateNewForm=async (req, res) => {
      const newListing = new Listing(req.body.listing);
      const result = await new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
+     const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "STAYSPACE" },
         (error, result) => {
             if (error) {
                 reject(error);
-            } else {
+            } 
+            else {
                 resolve(result);
             }
         }
     );
-
     streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
 });
-
 newListing.image = {
     url: result.secure_url,
     filename: result.public_id,
 };
-      newListing.owner = req.user._id;
+      newListing.owner = req.user._id; 
       await newListing.save();
       req.flash("success","new listing added!");
       console.log(newListing);
@@ -53,8 +52,6 @@ newListing.image = {
  module.exports .EditNewForm= async(req,res)=>{
   let { id } = req.params;
    const listing = await Listing.findById(id);
-
-
     res.render("listings/edit.ejs",{listing});
  };
 

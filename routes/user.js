@@ -3,8 +3,9 @@
  const router = express.Router();
  const User = require("../models/user.js");
  const passport = require("passport");
-const userController =require("../controllers/user.js");
-const wrapAsync = require("../utils/wrapAsync.js");
+  const userController =require("../controllers/user.js");
+  const wrapAsync = require("../utils/wrapAsync.js");
+  
  // Show signup page
 router.get("/signup",userController.rendersignup );
 

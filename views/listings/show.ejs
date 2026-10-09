@@ -33,7 +33,7 @@
        <p class="card-text">&#8377; <%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
        <p class="card-text"><%=listing.location%>, <%=listing.country%>.</p>
 
-   <!-- Load your map logic AFTER defining the data -->
+   <!-- Load  map logic AFTER data-->
 <script src="/js/map.js"></script>   
    </div>
  </div>
@@ -64,24 +64,24 @@
    <hr />
   <h4 class="fs-4"><b>Rating and reviews</b></h4>
   <form action="/listings/<%= listing._id %>/reviews"  method="POST" novalidate class="needs-validation">
-  <div class="mb-3 mt-3" >
 
-    <div>
+
+
+  <div class="mb-3 mt-3" >
+  <div>
    <label  class="form-label fw-bold" for="rating">RATING</label>
    <input type="range" min="1" max="5" id="rating" name="review[rating]">
    </div>
 
   <div>
    <label for="Comments" class="form-label fw-bold">Comments</label>
-   <textarea name="review[comment]" id="cmment" cols="30" rows="5"
-    class="form-control" required >
+   <textarea name="review[comment]" id="cmment" cols="30" rows="5" class="form-control" required >
    </textarea>
- </div>
+   </div>
 
  <div class="invalid-feedback">  please Submit some comment for review</div>
-
   <button class="btn btn-outline- btn-dark">Submit</button>
-</div>
+ </div>
  </form>
 
 

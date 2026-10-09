@@ -1,4 +1,4 @@
-// console.log("My Key ID is:", process.env.RAZORPAY_KEY_ID); // <-- ये लाइन डाल
+
 const crypto = require('crypto');
 const Booking = require('../models/booking');
 const Listing = require('../models/listing'); 
@@ -14,7 +14,7 @@ module.exports.createOrder = async (req, res) => {
     try {
         const { amount } = req.body; // Frontend se amount le raha hai
         const options = {
-            amount: amount * 100, // Paise mein convert karne ke liye
+            amount: amount * 100, 
             currency: "INR",
             receipt: "receipt_booking_" + Date.now(),
         };
