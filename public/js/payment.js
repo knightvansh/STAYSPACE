@@ -1,8 +1,10 @@
- const payBtn = document.getElementById('pay-btn');
+const payBtn = document.getElementById('pay-btn');
+
+
 
 if (payBtn) {
-    payBtn.addEventListener('click', async function (e) { 
-        e.preventDefault();
+    payBtn.addEventListener('click', async function(e){ 
+         e.preventDefault() ; //page ko reload hone se rokte hai taaki mera aage ka JavaScript (API calls) bina interrupt hue chal sake."
         const listingId = this.getAttribute('data-listing-id');
         
         try { 

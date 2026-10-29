@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-// कंट्रोलर वाली फाइल को यहाँ मंगा लो
+
 const paymentController = require('../controllers/payment');
 
 const { isLoggedIn } = require("../utils/middleware.js");

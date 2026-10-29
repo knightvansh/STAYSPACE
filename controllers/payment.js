@@ -1,9 +1,8 @@
-
-
+// console.log("My Key ID is:", process.env.RAZORPAY_KEY_ID); // <-- ये लाइन डाल
+const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Booking = require('../models/booking');
 const Listing = require('../models/listing'); 
-const Razorpay = require('razorpay');
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -14,12 +13,12 @@ module.exports.createOrder = async (req, res) => {
     try {
         const { amount } = req.body; // Frontend se amount le raha hai
         const options = {
-            amount: amount * 100, // Paise mein convert karne ke liye
+            amount: amount * 100, 
             currency: "INR",
             receipt: "receipt_booking_" + Date.now(),
         };
 
-        const order = await razorpayInstance.orders.create(options);
+        const order = await razorpay.orders.create(options);
         res.status(200).json({ success: true, order });
        } 
         catch (error) {
@@ -47,7 +46,7 @@ module.exports.createOrder = async (req, res) => {
                 razorpay_payment_id: razorpay_payment_id,
                 amount: 1000                // Storing the price
             });
-            
+
             await newBooking.save(); // Save to MongoDB!
             console.log("Booking saved to Database!");
             // console.log("Payment successfully verified by backend!");

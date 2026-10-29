@@ -1,4 +1,4 @@
-require("dotenv").config();
+  require("dotenv").config();
 const express=require("express");
 const cors = require("cors");
 const app = express();
@@ -73,10 +73,10 @@ const store=MongoStore.create({
 store.on("error",()=>{
    console.log("ERROR IN MONGO SESSION STORE",err);
 })
-
+//  Session & Cookie Configuration
 const  sessionOptions={
   store,
-  secret:"process.env.SECRET",
+  secret:process.env.SECRET,
   resave:false, 
   saveUninitialized: true,
   cookie:{
@@ -90,11 +90,10 @@ app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+// Passport Authentication Setup
 passport.use(new LocalStrategy(User.authenticate()));
-
-// use static serialize and deserialize of model for passport session support
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(User.serializeUser());  // insert User ID into the session 
+passport.deserializeUser(User.deserializeUser());//Spread the user data on every page. 
 
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");

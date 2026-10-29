@@ -6,15 +6,12 @@
 const {listingSchema,reviewSchema}=require("../schema.js");
 const Listing=require("../models/listing.js");
 const ExpressError=require("../utils/ExpressError.js");
-// Multer storage config — keeps the file extension, unlike the old dest-only setup
 const multer = require("multer");
-// const path = require("path");
 const { isLoggedIn } = require("../utils/middleware.js");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Not wired into any route yet — fix signature if/when you use it as middleware
 const validateListing=(req, res, next)=>{
  let { error } = listingSchema.validate(req.body);
   if (error) {
@@ -26,12 +23,12 @@ const validateListing=(req, res, next)=>{
 };
 const ListingController=require("../controllers/listing.js")
 
-
-
 // 2. Root Routes (Index & Create)
 router
 .route("/")
+
  .get( wrapAsync(ListingController.index))
+
  .post(
     isLoggedIn,
     upload.single("listing[image]"),

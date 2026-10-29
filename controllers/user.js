@@ -1,7 +1,6 @@
 
 const User=require("../models/user");
-
-module.exports.rendersignup = (req, res) => {
+ module.exports.rendersignup = (req, res) => {
     res.render("users/signup.ejs");
 };
 
@@ -19,23 +18,24 @@ module.exports.signup=async (req, res, next) => {
                 return next(err);
             }
             req.flash("success", "Welcome to STAYSPACE!");
-            res.redirect("/listings");
-        });
-    }
-    catch (err) {
+            res.redirect("/listings"); 
+    });
+}
+
+    catch(err) {
          req.flash("error", err.message);
-        res.redirect("/signup");
+         res.redirect("/signup");
     }
-};
+    
+ };
 
  module.exports.renderlogin = (req, res) => { 
     console.log("GET login:", req.session.redirectUrl);
-    res.render("users/login.ejs");
+    res.render("users/login.ejs");  //UI Dikhana
 };
 
 
   module.exports.postlogin = (req, res) => { 
-            // console.log("LOGIN USER:", req.user);//
             const redirectUrl =  "/listings";
             req.flash("success", "Welcome back to STAYSPACE!");
             res.redirect(redirectUrl);
