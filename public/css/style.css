@@ -7,7 +7,14 @@ body {
 
 /* Navbar */
 .navbar{
-    height: 4rem;
+   min height: 4rem;
+   background-color: #ffffff;
+}
+@media (max-width: 767px) {
+  .navbar-collapse {
+    background-color: inherit; /* Matches your navbar color in both light and dark mode */
+    padding: 1rem 0;
+  }
 }
 .fa-compass{
   color:red;
