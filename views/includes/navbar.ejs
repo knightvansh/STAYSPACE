@@ -1,53 +1,72 @@
-  <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
-  <div class="container-fluid">
-  <a class="navbar-brand mx-4" href="/listings">
-    <i class="fa-solid fa-diamond-turn-right"></i>
-    STAYSPACE</a>
+<nav class="navbar navbar-expand-lg sticky-top border-bottom">
+  <div class="container">
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i>
+      <span>STAYSPACE</span>
+    </a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <div class="navbar-controls">
+      <button
+        id="darkModeToggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch to dark mode"
+        aria-pressed="false"
+        title="Toggle color theme"
+      >
+        <i id="theme-icon" class="fa-solid fa-moon" aria-hidden="true"></i>
+      </button>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
 
-   <!--  Dark mode button -->
-<button id="darkModeToggle" class=" btn-outline-light">
-  <i id="theme-icon" class="fa-solid fa-moon"></i>
-</button>
-  
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <ul class="navbar-nav me-lg-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">All Listings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new">Add New Listing</a>
+        </li>
+      </ul>
 
-   <!-- Search and explore button  -->
-<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav fw-bold">
-            <a class="nav-link" href="/listings">Explore</a>
-        </div>
-        <div class="navbar-nav ms-auto">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2 search-box" type="search" placeholder="Search destinations" aria-label="Search">
-                <button class="search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;<strong>Search</strong></button>
-            </form>
-        </div>
-  </div>
-  <br>
- 
- 
-  <!-- Home listing and Add New Listing button  -->
-    <div class="navbar-nav ">
-      <a class="nav-item nav-link " href="/listings">Home <span class="sr-only"></span></a>
-      <a class="nav-item nav-link" href="/listings">All Listings</a>
-      <a class="nav-item nav-link" href="listings/new"> Add new listing</a>
-  </div>
+      <form class="nav-search" role="search" action="/listings" method="GET">
+        <input
+          class="form-control"
+          type="search"
+          name="search"
+          value="<%= typeof search === 'string' ? search : '' %>"
+          placeholder="Search destinations"
+          aria-label="Search destinations"
+        >
+        <button class="search-btn" type="submit">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <span>Search</span>
+        </button>
+      </form>
 
-    <!-- login, logout, and signup button  -->
-  <div class="navbar-nav fw-bold ms-auto">
-     <% if(!currUser)
-      { %>
-      <a class="nav-item nav-link " href="/signup">Sign up <span class="sr-only"></span></a>
-      <a class="nav-item nav-link" href="/login">Login</a>
-      <%} %>
+      <div class="navbar-actions">
+        <% if(typeof currUser !== "undefined" && currUser) { %>
+          <form action="/logout" method="POST" class="m-0">
+            <button type="submit" class="btn btn-outline-secondary">Log out</button>
+          </form>
+        <% } else { %>
+          <a class="nav-link" href="/signup">Sign up</a>
+          <a class="btn btn-outline-secondary" href="/login">Login</a>
+        <% } %>
+      </div>
+    </div>
   </div>
-  </div>
-  <% if(currUser) { %>
-  <form action="/logout" method="POST">
-   <button type="submit">Log out</button>
-</form>
-   <%} %>
-</nav> 
+</nav>

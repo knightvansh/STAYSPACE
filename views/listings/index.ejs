@@ -1,96 +1,122 @@
-  <% layout("layouts/boilerplate") %><%=success %>
-  <body>
-     <!-- <div class="d-flex flex-row overflow-auto filter-bar">
+<% layout("layouts/boilerplate") %>
 
-            <div class="filter">
-                <i class="fa-solid fa-ticket-simple"></i>
-                <p>icons</p>
-            </div>
+<section class="listing-explorer" aria-labelledby="listing-heading">
+  <div class="listing-hero">
+    <span class="listing-eyebrow"><i class="fa-solid fa-compass" aria-hidden="true"></i> Find your next escape</span>
+    <h1 id="listing-heading">Stays that make the trip</h1>
+    <p>Explore places worth travelling for, from city hideaways to quiet retreats.</p>
+  </div>
 
-           
-            <div class="filter">
-                <i class="fa-solid fa-snowflake"></i>
-                <p>Arctic</p>
-            </div>
-
-            <div class="filter">
-                <i class="fa-solid fa-fire"></i>
-                <p>Trending</p>
-            </div>
-
-            <div class="filter">
-                <i class="fa-solid fa-water"></i>
-                <p>Lake</p>
-            </div>
-
-            <div class="filter">
-                <i class="fa-solid fa-umbrella-beach"></i>
-                <p>Beach</p>
-            </div>
-
-            <div class="filter">
-                <i class="fa-solid fa-satellite"></i>
-                <p><a href="/category/OMG">OMG!</a></p>
-            </div>
-
-            <div class="filter">
-                <i class="fa-solid fa-mug-hot"></i>
-                <p>Bed&Breakfast</p>
-            </div>
-
-            <div class="filter">
-                <i class="fa-solid fa-cow"></i>
-                <p>
-                    <a href="/category/Farm">Farm</a>
-                </p>
-            </div>
-
-            <div class="filter setting">
-                <i class="fa-solid fa-sliders">
-                </i>
-                <p>filters</p>
-            </div>
-  </div> -->
-
-<!-- 
-            <div class="form-check-reverse border1 filter form-switch"> 
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                <label class="form-check-label" for="flexSwitchCheckDefault">Display total before taxes</label>
-            </div> -->
-
-
-    <h3>All Listings</h3>
-     <!-- <form method="GET" action="/listings/new">
-      <button>Create New Listing</button>
-    </form>  -->
-
-<!-- All Listing Section -->
-
-<div class="card-container row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 g-4">
-<% for(let listing of allListings) 
-    { %>
-        <!-- Making clickable card by wrapping in side anchor tag. -->
- <a href="/listings/<%= listing._id %>" class="listing-link">
-   <div class="card col listing-card"  style="width: 20rem">
-   <img src="<%= listing.image.url %>"
-   class="card-img-top" 
-   alt="listing_image" 
-   style="height:18rem;"/>
-    
-         <!-- Overlay Effect on Card -->
-        <div class="card-img-overlay"></div>
-        <div class="card-body">
-        <h6 class="card-title"><%= listing.title %></h6>
-          <p class="card-text">
-        &#8377;<%= listing.price != null ?  listing.price.toLocaleString("en-IN") : "N/A"  %><span> per guest</span>
-         <small><i class="tax-info">&nbsp;&nbsp;&nbsp;&nbsp;+18% GST</i></small>  
-         </p>   
-     </div>
- </div>
- </a>
-
-<% }  %>
-     
+  <form class="listing-filters" action="/listings" method="GET" aria-label="Filter listings">
+    <div class="filter-field filter-search-field">
+      <label for="listing-search">Destination or stay</label>
+      <div class="filter-input-wrap">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input
+          id="listing-search"
+          class="form-control"
+          type="search"
+          name="search"
+          value="<%= search %>"
+          placeholder="Try a city, country, or stay"
+        >
+      </div>
     </div>
 
-  </body>
+    <div class="filter-field">
+      <label for="listing-country">Country</label>
+      <select id="listing-country" class="form-select" name="country">
+        <option value="">Anywhere</option>
+        <% for (const country of countries) { %>
+          <option value="<%= country %>" <%= selectedCountry === country ? "selected" : "" %>><%= country %></option>
+        <% } %>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label for="minimum-price">Minimum price</label>
+      <div class="price-input-wrap">
+        <span aria-hidden="true">&#8377;</span>
+        <input
+          id="minimum-price"
+          class="form-control"
+          type="number"
+          name="minPrice"
+          min="0"
+          step="0.01"
+          value="<%= minPrice %>"
+          placeholder="Any"
+        >
+      </div>
+    </div>
+
+    <div class="filter-field">
+      <label for="maximum-price">Maximum price</label>
+      <div class="price-input-wrap">
+        <span aria-hidden="true">&#8377;</span>
+        <input
+          id="maximum-price"
+          class="form-control"
+          type="number"
+          name="maxPrice"
+          min="0"
+          step="0.01"
+          value="<%= maxPrice %>"
+          placeholder="Any"
+        >
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="filter-apply" type="submit">
+        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+        <span>Apply filters</span>
+      </button>
+      <a class="filter-reset" href="/listings">Reset</a>
+    </div>
+  </form>
+
+  <div class="listing-results" aria-live="polite">
+    <strong><%= allListings.length %></strong>
+    <%= allListings.length === 1 ? "stay" : "stays" %> found
+  </div>
+
+  <% if (allListings.length) { %>
+    <div class="card-container row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+      <% for (const listing of allListings) { %>
+        <a href="/listings/<%= listing._id %>" class="listing-link col">
+          <article class="card listing-card">
+            <div class="listing-image-wrap">
+              <img
+                src="<%= listing.image && listing.image.url ? listing.image.url : 'https://via.placeholder.com/800x600?text=StaySpace' %>"
+                class="listing-index-image"
+                alt="<%= listing.title %>"
+                loading="lazy"
+                decoding="async"
+              >
+              <span class="listing-image-badge"><i class="fa-solid fa-star" aria-hidden="true"></i> StaySpace</span>
+            </div>
+            <div class="card-body">
+              <h2 class="card-title"><%= listing.title %></h2>
+              <p class="listing-location">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                <%= listing.location %><%= listing.country ? `, ${listing.country}` : "" %>
+              </p>
+              <p class="card-text">
+                <strong>&#8377;<%= listing.price != null ? listing.price.toLocaleString("en-IN") : "N/A" %></strong>
+                <span>per night</span>
+              </p>
+            </div>
+          </article>
+        </a>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="listing-empty-state">
+      <i class="fa-regular fa-face-meh" aria-hidden="true"></i>
+      <h2>No stays match those filters</h2>
+      <p>Try a different destination or widen your price range.</p>
+      <a class="filter-apply" href="/listings">Show all listings</a>
+    </div>
+  <% } %>
+</section>

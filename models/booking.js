@@ -14,15 +14,28 @@ const bookingSchema = new Schema({
         ref: 'Listing',
         required: true
     },
+    checkIn: {
+        type: Date,
+        required: true,
+    },
+    checkOut: {
+        type: Date,
+        required: true,
+    },
+    holdExpiresAt: {
+        type: Date,
+        required: true,
+    },
     // 3. Payment Details (To prove they actually paid)
-    razorpay_order_id: String,
-    razorpay_payment_id: String,
+    razorpay_order_id: { type: String, unique: true, required: true },
+    razorpay_payment_id: { type: String, unique: true, sparse: true },
     amount: Number,
     
     // 4. Booking Status
     status: { 
         type: String, 
-        default: 'Confirmed' 
+        enum: ['PENDING_PAYMENT', 'CONFIRMED', 'CANCELLED'],
+        default: 'PENDING_PAYMENT'
     },
     createdAt: {
         type: Date,

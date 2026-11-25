@@ -53,6 +53,8 @@ main()
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.engine("ejs", ejsMate);
+app.locals.success = [];
+app.locals.error = [];
 
 app.use(cors());
 
@@ -65,12 +67,12 @@ app.use(express.static(path.join(__dirname,"/public")));
 const store=MongoStore.create({
   mongoUrl:dbUrl,
   crypto:{
-      secret:"process.env.SECRET",
+      secret:process.env.SECRET,
   },
  touchAfter:24*3600,
 })
 
-store.on("error",()=>{
+store.on("error",(err)=>{
    console.log("ERROR IN MONGO SESSION STORE",err);
 })
 //  Session & Cookie Configuration
@@ -78,14 +80,13 @@ const  sessionOptions={
   store,
   secret:process.env.SECRET,
   resave:false, 
-  saveUninitialized: true,
+  saveUninitialized:false,
   cookie:{
-        expire:Date.now()+7*24*60*60*10000,
-        maxAge:7*24*60*60*10000,
+        expires:new Date(Date.now()+7*24*60*60*1000),
+        maxAge:7*24*60*60*1000,
         httpOnly:true,
-  },
+  }
 };
-
 app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
@@ -96,9 +97,9 @@ passport.serializeUser(User.serializeUser());  // insert User ID into the sessio
 passport.deserializeUser(User.deserializeUser());//Spread the user data on every page. 
 
 app.use((req,res,next)=>{
-  res.locals.success=req.flash("success");
-  res.locals.error = req.flash("error");
-   res.locals.currUser = req.user;
+  res.locals.success=req.flash("success") || [];
+  res.locals.error = req.flash("error") || [];
+  res.locals.currUser = req.user || null;
   next();
 });
 // Express  Router 
@@ -112,7 +113,11 @@ app.use((req, res, next) => {
 });
 // Main error handler
 app.use((err, req, res, next) => {
+  console.error(`Request failed: ${req.method} ${req.originalUrl}`, err.stack || err);
   let { statusCode = 500, message = "Something went wrong!" } = err;
+  if (res.headersSent) {
+    return next(err);
+  }
   res.status(statusCode).render("error.ejs", { message });
 });
 /* Server setup */

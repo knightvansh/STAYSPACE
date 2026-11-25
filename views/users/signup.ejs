@@ -1,10 +1,10 @@
 <% layout("layouts/boilerplate") %>
-<div class="container">
-    <h2>Sign Up</h2>
-    <form action="/signup" method="POST">
+<div class="form-page">
+    <h1 class="page-title">Sign up</h1>
+    <form action="/signup" method="POST" class="form-card">
     
      <div class="mb-3">
-    <label for="username" class="form">  Username
+    <label for="username" class="form-label">Username
             </label>
 
             <input
@@ -15,7 +15,6 @@
                 required
             >
         </div>
-   <br>
         <div class="mb-3">
             <label for="email" class="form-label">
                 Email
@@ -29,7 +28,6 @@
                 required
             >
         </div>
-    <br>
         <div class="mb-3">
             <label for="password" class="form-label">
                 Password
@@ -43,9 +41,8 @@
                 required
             >
         </div>
-        <br>
 
-        <button type="submit" class=="btn btn-dark">
+        <button type="submit" class="btn btn-dark">
             Sign Up
         </button>
 

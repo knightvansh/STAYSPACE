@@ -4,9 +4,58 @@ const streamifier = require("streamifier");
 
 
 module.exports.index=async(req, res) => {
-  const allListings = await Listing.find({}).sort({ _id: -1 });
-   console.log("TOTAL LISTINGS:", allListings.length);
-   res.render("listings/index.ejs", { allListings });
+   const search = typeof req.query.search === "string" ? req.query.search.trim() : "";
+   const country = typeof req.query.country === "string" ? req.query.country.trim() : "";
+   const minPriceValue = typeof req.query.minPrice === "string" ? req.query.minPrice : "";
+   const maxPriceValue = typeof req.query.maxPrice === "string" ? req.query.maxPrice : "";
+   const parsePrice = (value) => {
+     if (value === "") return null;
+     if (!/^\d+(\.\d{1,2})?$/.test(value)) return Number.NaN;
+     const price = Number(value);
+     return Number.isFinite(price) ? price : Number.NaN;
+   };
+   const minPrice = parsePrice(minPriceValue);
+   const maxPrice = parsePrice(maxPriceValue);
+
+   if (search.length > 100 || country.length > 80) {
+     return res.status(400).render("error.ejs", { message: "Search filters are too long." });
+   }
+   if (Number.isNaN(minPrice) || Number.isNaN(maxPrice) || (minPrice !== null && maxPrice !== null && minPrice > maxPrice)) {
+     return res.status(400).render("error.ejs", { message: "Enter a valid minimum and maximum price." });
+   }
+
+   const filter = {};
+   if (search) {
+     const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+     const searchRegex = new RegExp(escapedSearch, "i");
+     filter.$or = [
+       { title: searchRegex },
+       { location: searchRegex },
+       { country: searchRegex },
+       { description: searchRegex },
+     ];
+   }
+   if (country) filter.country = country;
+   if (minPrice !== null || maxPrice !== null) {
+     filter.price = {};
+     if (minPrice !== null) filter.price.$gte = minPrice;
+     if (maxPrice !== null) filter.price.$lte = maxPrice;
+   }
+
+   const [allListings, countries] = await Promise.all([
+     Listing.find(filter).sort({ _id: -1 }),
+     Listing.distinct("country", { country: { $type: "string", $ne: "" } }),
+   ]);
+   countries.sort((a, b) => a.localeCompare(b));
+
+   res.render("listings/index.ejs", {
+     allListings,
+     countries,
+     search,
+     selectedCountry: country,
+     minPrice: minPriceValue,
+     maxPrice: maxPriceValue,
+   });
  }
  
  module.exports.renderNewForm=async(req, res) => {
@@ -17,6 +66,7 @@ module.exports.index=async(req, res) => {
  module.exports.ShowListing=async(req, res) =>{
             let { id } = req.params;
         const listing = await Listing.findById(id)
+        .populate("owner")
         .populate("reviews");
        res.render("listings/show.ejs",{listing});
     };
